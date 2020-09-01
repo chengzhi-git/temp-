@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  namespace   对应你要映射的  Dao的接口路径-->
+<mapper namespace="com.ftg.product.dao.PD">
+		<!-- select 查询   id  对应 dao的方法名  resultType 返回值类型   parameterType   参数类型    POJO   String  INTEGER  LONG  -->
+		<select id="query"  resultType="P"  parameterType="P">
+			 select PID,PNAME,PDATE,PCOUNT,PSTATUS,PSUBMIT,PBACK,plan.GID,GNAME,plan.UID,UNAME from plan left join goods on plan.GID=goods.GID left join users on plan.UID=users.UID
+		</select>
+		<select id="queryGname"  resultType="P"  parameterType="P">
+			select GNAME,GID from goods 
+		</select>
+		
+		<select id="queryByWeiSc"  resultType="P"  parameterType="P">
+			select PID,PNAME,PDATE,PCOUNT,PSTATUS,PSUBMIT,PBACK,plan.GID,GNAME,plan.UID,UNAME from plan left join goods on plan.GID=goods.GID left join users on plan.UID=users.UID
+			where PSTATUS=0
+		</select> 
+		
+		<select id="queryByZhengSc"  resultType="P"  parameterType="P">
+			select PID,PNAME,PDATE,PCOUNT,PSTATUS,PSUBMIT,PBACK,plan.GID,GNAME,plan.UID,UNAME from plan left join goods on plan.GID=goods.GID left join users on plan.UID=users.UID
+			where PSTATUS=1 or PSTATUS=2
+		</select> 
+		
+		<select id="queryByYiSc"  resultType="P"  parameterType="P">
+			select PID,PNAME,PDATE,PCOUNT,PSTATUS,PSUBMIT,PBACK,plan.GID,GNAME,plan.UID,UNAME from plan left join goods on plan.GID=goods.GID left join users on plan.UID=users.UID
+			where PSTATUS=3
+		</select> 
+		
+		<select id="queryNname"  resultType="P"  parameterType="P">
+			select UNAME,UID from users where DEPTID=1
+		</select>
+		
+		
+		
+		<select id="queryByPID"  resultType="P"  parameterType="P">
+			select PID,PNAME,PDATE,PCOUNT,PSTATUS,PSUBMIT,PBACK,plan.GID,GNAME from plan left join goods on plan.GID=goods.GID
+			  where PID=#{PID}
+		</select>
+		<!-- insert -->
+		<insert id="add" parameterType="P">
+		insert into plan (PID,PNAME, PCOUNT,PSTATUS,PSUBMIT,PBACK,GID,UID,PDATE)
+    values (UUID(),#{PNAME}, #{PCOUNT},0, 0, 0,  #{GID},#{UID},now())
+		</insert>
+		<!-- update -->
+		<update id="edit" parameterType="P">
+		 update plan
+		 <set>
+		 <if test="PNAME!=null" >PNAME=#{PNAME} , </if>
+		 <if test="PCOUNT!=null" >PCOUNT=#{PCOUNT} , </if>
+		 <if test="UID !=null ">UID=#{UID} , </if>
+		 </set>
+		 where PID=#{PID}
+		</update>
+		<!-- delete -->
+		<delete id="delete" parameterType="P" >
+		delete from plan where PID=#{PID}
+  		</delete>
+</mapper>

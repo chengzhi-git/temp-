@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftg.product.dao.DaiShenHeDao">
+	<!-- 取得用户列表 -->
+	<!-- id对应dao 中的方法名，resultType是返回数据类型   parameterType是参数数据类型 -->
+	<select id="queryTostorelist" resultType="Tostorelist" parameterType="Tostorelist">
+		select TOSTORELISTID,TOSTOREID,GOODSID,TOSTORELISTSTATUS,TOSTORELISTSIZE,TJCS,THCS from tostorelist
+		<where>
+			<!-- <if test="username != null and password != null">
+				username =#{username} and password =#{password}
+			</if>
+			<if test="id!=null">
+				and id=#{id}
+			</if> -->
+		</where>
+	</select>
+	<!-- <select id="queryById"  resultType="Tostorelist" parameterType="Tostorelist">
+		select lid, lname, lrealname, lpassword, ltelphone, to_char(lcreatetime,'yyyy-MM-dd') lcreatetime,  to_char(lupdatetime,'yyyy-MM-dd') lupdatetime, to_char(llasttime,'yyyy-MM-dd') llasttime from login
+		<where>
+			
+			<if test="username != null and password != null">
+				username =#{username} and password =#{password}
+			</if>
+			//随便粘到这里，本来在28 行and id=#{id}
+			
+			<if test="LID!=null">这里得LID是pojo得属性
+				
+				lid = #{LID}
+			</if>
+			 
+		</where>
+	</select>
+	
+	新增用户
+	<insert id="insert" parameterType="Tostorelist">
+	  insert into login
+	    (lid, lname, lrealname, lpassword, ltelphone, lcreatetime, lupdatetime, llasttime)
+	  values
+	    (LOGIN_SEQ.nextval, #{LNAME},  #{LREALNAME},  #{LPASSWORD},  #{LTELPHONE},  to_date(#{LCREATETIME},'yyyy-MM-dd'),  to_date(#{LUPDATETIME},'yyyy-MM-dd'), sysdate)
+  
+		<selectKey keyProperty="lid" resultType="Long">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	修改用户
+	<update id="update" parameterType="Tostorelist">
+		update login
+		<set>
+			<if test="LID != null">lid=#{LID},</if>
+			<if test="LNAME != null">lname=#{LNAME},</if>
+			<if test="LREALNAME != null">username=#{LREALNAME},</if>
+			<if test="LPASSWORD != null">password=#{LPASSWORD},</if>
+			<if test="LTELPHONE != null">username=#{LTELPHONE},</if>
+			<if test="LCREATETIME != null">password=to_date(#{LCREATETIME},'yyyy-MM-dd'),</if>
+			<if test="LUPDATETIME != null">username=to_date(#{LUPDATETIME},'yyyy-MM-dd'),</if>
+			<if test="LLASTTIME != null">password=sysdate,</if>
+		</set>
+		where lid=#{LID}
+	</update>
+	删除用户
+	<delete id="delete1" parameterType="Tostorelist">
+		delete from login where lid=#{LID}
+	</delete> -->
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

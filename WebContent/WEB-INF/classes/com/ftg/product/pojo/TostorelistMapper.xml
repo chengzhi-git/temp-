@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftg.product.dao.DaiShenHeDao">
+	<!-- 取得用户列表 -->
+	<!-- id对应dao 中的方法名，resultType是返回数据类型   parameterType是参数数据类型 -->
+	<select id="queryTostorelist" resultType="Tostorelist" parameterType="Tostorelist">
+	<!-- 	select  t.TSLID,ts.tsren ,p.PID,p.PNAME,u.UNAME,p.PCOUNT,t.TSLCOUNT,p.PSTATUS,g.GNAME
+from plan p left join tostore ts on ts.PID = p.PID left join tostorelist t on ts.TSID = t.TSID left join goods g on g.GID=p.GID left join users u on p.UID = u.UID
+ -->
+select tl.TSLID,t.tsren ,p.PID,p.PNAME,u.UNAME,p.PCOUNT,tl.TSLCOUNT,p.PSTATUS,g.GNAME 
+from tostorelist tl left join plan p on tl.PID=p.PID left join tostore t on t.TSID=tl.TSID left join
+goods g on g.GID=p.GID left join users u on p.UID = u.UID
+
+		<!-- 这个连表有很大的关系，左连接，比如计划被删除了，我tostorelist正在最左边还是会查出数据的 -->
+		<where>
+			<!-- <if test="username != null and password != null">
+				username =#{username} and password =#{password}
+			</if>
+			<if test="id!=null">
+				and id=#{id}
+			</if> -->
+		</where>
+	</select>
+	
+	<select id="queryXguan" resultType="InStore" >
+		select TOSTORELISTID,TOSTOREID,GOODSID,TOSTORELISTSTATUS,TOSTORELISTSIZE,TJCS,THCS from tostorelist
+		<where>
+			<!-- <if test="username != null and password != null">
+				username =#{username} and password =#{password}
+			</if>
+			<if test="id!=null">
+				and id=#{id}
+			</if> -->
+		</where>
+	</select>
+	
+	<select id="queryCangKu"  resultType="CangKu" >
+		select g.SID,s.SNAME,g.GPS,g.SPACE from  goodsplace g left join storage s on g.SID=s.SID 
+	</select>
+	
+	<select id="queryFromInstoreOne"  resultType="InStore" parameterType="Tostorelist">
+		select ISID,ISNAME from instore where PID=#{PID}
+	</select>
+	
+	
+	
+	
+	<select id="queryInStorelist"  resultType="InStoreList" >
+<!-- 		select ISLID, i.ISNAME,i.ISID, p.PNAME, gs.GPS,il.GSID,il.ISLGUI,il.ISLCOUNT from instore il left join 
+		 instorelist i on il.ISID=i.ISID left join plan p on p.PID=il.PID left join goodsplace gs on gs.GPID = il.GSID -->
+		 
+	select ISLID, il.ISNAME,storage.SNAME,i.ISID, p.PNAME, gs.GPS,i.GPID,i.ISLGUI,i.ISLCOUNT from instorelist i left join plan p  on p.PID = i.PID left join
+		 instore il on p.PID=il.PID  left join goodsplace gs on gs.GPID = i.GPID 
+		  left join storage  on storage.SID=gs.SID
+	</select>
+	
+	
+	<select id="queryPlanList" resultType="PlanList" parameterType="PlanList"><!-- ,TJCS,THCS -->
+		select PLANLISTID,GOODSID,PLANID,PLANLISTSTATUS,PLANLISTSIZE from planlist
+		<where>
+			<!-- <if test="username != null and password != null">
+				username =#{username} and password =#{password}
+			</if>
+			<if test="id!=null">
+				and id=#{id}
+			</if> -->
+		</where>
+	</select>
+	<!-- <select id="queryById"  resultType="Tostorelist" parameterType="Tostorelist">
+		select lid, lname, lrealname, lpassword, ltelphone, to_char(lcreatetime,'yyyy-MM-dd') lcreatetime,  to_char(lupdatetime,'yyyy-MM-dd') lupdatetime, to_char(llasttime,'yyyy-MM-dd') llasttime from login
+		<where>
+			
+			<if test="username != null and password != null">
+				username =#{username} and password =#{password}
+			</if>
+			//随便粘到这里，本来在28 行and id=#{id}
+			
+			<if test="LID!=null">这里得LID是pojo得属性
+				
+				lid = #{LID}
+			</if>
+			 
+		</where>
+	</select>-->
+	
+	<!-- 新增用户-->
+	<insert id="insertToInstore" parameterType="Tostorelist">
+	  insert into instore	  
+	    (ISID, ISNAME, PID, ISDATE,ISREN)
+	  values
+	    (UUID(),'rf--${PNAME}',#{PID},now(),#{UID})
+		<selectKey keyProperty="lid" resultType="Long">
+			select last_insert_id() as id
+		</selectKey>
+	</insert> 
+	
+	
+	<!-- 插入入库清单-->
+	<insert id="insertIntoRuKu" parameterType="InStoreList">
+	  insert into instorelist	  
+	    (ISLID, ISID, PID, GPID,ISLGUI,ISLCOUNT,ISLDATE)
+	  values
+	    (UUID(),#{ISID},#{PID},#{GPID},#{ISLGUI},#{ISLCOUNT},now())
+		<selectKey keyProperty="lid" resultType="Long">
+			select last_insert_id() as id
+		</selectKey>
+	</insert> 
+	
+	<!-- 修改状态为0，退回数+！ -->
+	<update id="updatePlanToBack" parameterType="Tostorelist">
+		update plan set PSTATUS=0,PBACK=PBACK+1 where pid=#{PID}
+		 <set>
+		<!-- 	<if test="PLANLISTSTATUS != null">PLANLISTSTATUS="0"</if> -->
+		<!-- 	<if test="THCS != null">THCS=THCS+1</if>
+		<if test="TJCS != null">TJCS=TJCS+1,</if>加一好像是这么做的 -->
+		</set> 
+	</update> 
+	
+	<update id="updatePlanTongguo" parameterType="Tostorelist">
+		update plan set PSTATUS=3 where pid=#{PID}
+		 <set>
+			<!-- <if test="PSTATUS != null">PSTATUS="0"</if> -->
+		<!-- 	<if test="THCS != null">THCS=THCS+1</if>
+		<if test="TJCS != null">TJCS=TJCS+1,</if>加一好像是这么做的 -->
+		</set> 
+	</update> 
+	
+	
+	<!-- 删除交库清单的一条数据 -->
+	<delete id="deletePlanToBack" parameterType="Tostorelist">
+		delete from tostorelist where tslid=#{TSLID}
+	</delete>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

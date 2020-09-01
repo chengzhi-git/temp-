@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  namespace   对应你要映射的  Dao的接口路径-->
+<mapper namespace="com.ftg.product.dao.PlanDao">
+		<!-- select 查询   id  对应 dao的方法名  resultType 返回值类型   parameterType   参数类型    POJO   String  INTEGER  LONG  -->
+		<select id="query"  resultType="Plan"  parameterType="Plan">
+			 select planlist.PLID,plan.PID,PNAME,plan.UID,UNAME,plan.GID,GNAME,PCOUNT,PSTATUS,PDATE from plan
+			 right join planlist on plan.PID=planlist.PID left join goods on plan.GID=goods.GID left join users on plan.UID=users.UID
+		</select>
+		
+		<select id="queryTostore"  resultType="Plan"  parameterType="Plan">
+			  select tostore.TSID,TSNAME,u.UNAME,tostore.PID,plan.GID,plan.PSTATUS,TSDATE,GNAME,PNAME,PCOUNT,TSREN 
+			  from tostore left join plan on tostore.PID=plan.PID left join goods on plan.GID=goods.GID left join users u on u.UID = tostore.TSREN
+				where tostore.TSID  in (select TSID from tostorelist)
+		</select>
+		
+		<insert id="addTostore"    parameterType="Plan">
+			insert into tostore (TSID,TSNAME,PID,TSREN,TSDATE) values (UUID(),'JK--${PNAME}',#{PID},#{UID},now())
+		</insert>
+		
+		
+		
+		<select id="queryTostorelist"  resultType="Plan"  parameterType="Plan">
+			 select TSLID,tostorelist.TSID,tostorelist.PID,plan.GID,plan.PSTATUS,GNAME,TSLCOUNT,TSLDATE,TSNAME,PNAME from tostorelist left join tostore on tostorelist.TSID=tostore.TSID left join plan on tostorelist.PID=plan.PID left join goods on plan.GID=goods.GID 
+						 <!-- select TSID from tostore where TSID not in (select TSID from tostorelist) -->
+		</select>
+		
+		
+		<select id="queryYiShengDan"  resultType="Plan"  parameterType="Plan">
+			 select tostore.TSID,TSNAME,u.UNAME,tostore.PID,plan.GID,plan.PSTATUS,TSDATE,GNAME,PNAME,PCOUNT,TSREN 
+			  from tostore left join plan on tostore.PID=plan.PID left join goods on plan.GID=goods.GID left join users u on u.UID = tostore.TSREN
+			  where tostore.TSID not in (select TSID from tostorelist)
+						 <!-- select TSID from tostore where TSID not in (select TSID from tostorelist) -->
+		</select>
+		
+		<insert id="addTostorelist"    parameterType="Plan">
+			insert into tostorelist (TSLID,TSID,PID,TSLCOUNT,TSLDATE) values (UUID(),#{TSID},#{PID},#{TSLCOUNT},now())
+		</insert>
+		
+ 	
+	<!-- 	update 修改对应的计划状态为2表示正在审核 -->
+		<update id="updatePlan" parameterType="Plan">
+			update plan
+			set PSTATUS = 2
+			where pid = #{PID}
+		</update>
+		
+		<!--delete deletePlanList -->
+			 <delete id="deletePlanList" parameterType="Plan" >
+   				 delete from planlist where PID = #{PID}
+  </delete> 
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 配置MyBatis的pojo文件夹 -->
+	<typeAliases>
+		<package name="com.ftg.product.pojo" />
+	</typeAliases>
+	
+	<!-- 配置所有 MyBatis需要的 数据库配置文件 -->
+	<mappers>
+		<!-- 这里是编写 Sql文件的 xml文件信息 -->
+		<mapper resource="com/ftg/product/pojo/TostorelistMapper.xml" />
+		<mapper resource="com/ftg/product/pojo/PlanScMapper.xml" /> 
+		
+		<mapper resource="com/ftg/product/pojo/PMapper.xml" /><!-- 唐丹丹计划 -->
+		<mapper resource="com/ftg/product/pojo/PlanMapper.xml" /><!-- 唐丹丹交库 -->
+		
+		<mapper resource="com/ftg/product/pojo/LoginMapper.xml" /><!-- 程智计划 -->
+				<mapper resource="com/ftg/product/pojo/ZhuCeMapper.xml" /><!-- 程智计划 -->
+				<mapper resource="com/ftg/product/pojo/PersonManageMapper.xml" /><!-- 程智计划 -->
+	</mappers>
+</configuration> 

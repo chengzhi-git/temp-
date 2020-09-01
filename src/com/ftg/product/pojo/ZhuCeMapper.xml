@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  namespace   对应你要映射的  Dao的接口路径-->
+<mapper namespace="com.ftg.product.dao.ZhuCeDao">
+		<!-- select 查询   id  对应 dao的方法名  resultType 返回值类型   parameterType   参数类型    POJO   String  INTEGER  LONG  -->
+		<insert id="add"   parameterType="ZhuCe">
+		
+			insert into users(DEPTID,UNAME,UAGE,USEX,UTEL,UADDRESS,UPASSWORD)   
+			 values('',#{UNAME},#{UAGE},#{USEX},#{UTEL},#{UADDRESS},#{UPASSWORD})
+		</insert>
+</mapper>

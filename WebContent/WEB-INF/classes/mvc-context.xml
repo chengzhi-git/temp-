@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+
+xmlns:context="http://www.springframework.org/schema/context"
+
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+
+http://www.springframework.org/schema/context 
+
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- 文件扫描器监控src下面的文件-->
+		<context:component-scan base-package="com.ftg.product.*" />
+		<context:component-scan base-package="cn.com.swansoft.sms.web.controller"/>
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+				<property name="webBindingInitializer">
+					<!--  日期转换类路径  -->
+						<bean class="com.ftg.product.util.DateConverter"/>
+				</property>
+	</bean>
+		<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+			<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+			<!-- 页面拦截器以及拦截页面的后缀名通过spring的视图控制器 -->
+			<property name="prefix" value="/jsp/" />
+			<property name="suffix" value=".jsp" />
+		</bean>
+</beans>
+

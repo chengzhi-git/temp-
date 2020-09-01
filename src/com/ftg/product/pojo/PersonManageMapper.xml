@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftg.product.dao.PersonManageDao">
+		<!-- select 查询   id  对应 dao的方法名  resultType 返回值类型   parameterType   参数类型    POJO   String  INTEGER  LONG  -->
+		<select id="query"  resultType="ZhuCe"  parameterType="ZhuCe">
+			select  UID,DEPTID,UNAME,UAGE,USEX,UTEL,UPASSWORD,UADDRESS from USERS 
+			<where>
+					and DEPTID=#{DEPTID}  
+			</where>
+		</select>
+		<select id="query1"  resultType="ZhuCe"  >
+			select  UID,DEPTID,UNAME,UAGE,USEX,UTEL,UPASSWORD,UADDRESS from USERS 
+			<where>
+					and DEPTID=""
+			</where>
+		</select>
+		<select id="queryDept"  resultType="Dept" >
+		select DEPTID,DEPTNAME from DEPT
+		</select>
+		<update id="bangdingcg" parameterType="ZhuCe">
+			update users set DEPTID=#{D2} where UID=#{UID}
+		</update>
+		<update id="scsc" parameterType="ZhuCe">
+			update users set DEPTID="" where UID=#{UID}
+		</update>
+</mapper>

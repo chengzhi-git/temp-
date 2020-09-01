@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  namespace   对应你要映射的  Dao的接口路径-->
+<mapper namespace="com.ftg.product.dao.LoginDao">
+		<!-- select 查询   id  对应 dao的方法名  resultType 返回值类型   parameterType   参数类型    POJO   String  INTEGER  LONG  -->
+		<select id="queryLogin"  resultType="ZhuCe"  parameterType="ZhuCe">
+			select  DEPTID,UNAME,UID,UPASSWORD from USERS 
+			<where>
+				<if test="UNAME != null and UNAME !=''">
+					and UNAME=#{UNAME}  
+				</if>
+				<if test="UPASSWORD != null and UPASSWORD !=''">
+					and UPASSWORD=#{UPASSWORD}  
+				</if>
+			</where>
+		</select>
+		
+		<!-- 
+		<select id="queryQx1"  resultType="Menus"  parameterType="ZhuCe">
+				select   MENUS.MID, MENUS.MNAME, MENUS.MURL, MENUS.MPID from menus  right  join  
+			(
+				select  MID  from   qxmenus  where  QXID in 
+				(  
+					select  QXID from  deptqx  where  DEPTID in
+					(
+					select DEPTID from users where UNAME=#{UNAME}  
+					)
+				)
+			) QM
+			
+			on  MENUS.MID =QM.MID    where   MENUS.MPID  != -1 
+		</select>
+		<select id="queryQx2"  resultType="Menus"  parameterType="ZhuCe">
+				select   MENUS.MID, MENUS.MNAME, MENUS.MURL, MENUS.MPID from menus  right  join  
+			(
+				select  MID  from   qxmenus  where  QXID in 
+				(  
+					select  QXID from  deptqx  where  DEPTID in
+					(
+					select DEPTID from users where UNAME=#{UNAME}  
+					)
+				)
+			) QM
+			
+			on  MENUS.MID =QM.MID    where   MENUS.MPID  = -1 
+		</select> -->
+</mapper>

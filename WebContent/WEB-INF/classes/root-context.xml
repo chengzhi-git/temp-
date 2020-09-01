@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+                http://www.springframework.org/schema/context  
+                 http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+                http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- 配置DataSource数据源 -->
+	<!-- 数据库配置信息 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url"  value="jdbc:mysql://localhost:3306/qx" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+		<property name="maxActive" value="5" />
+		<property name="maxIdle" value="3" />
+		<property name="maxWait" value="1000" />
+		<property name="defaultAutoCommit" value="true" />
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="60" />
+	</bean>
+
+	<!-- 创建SqlSessionFactory，同时指定数据源   加载Mybatis的数据文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+	</bean>
+	
+	    <!-- 配置原有 Dao层需要的 访问的属性 -->    
+	<!-- 用户Dao -->
+	<bean id="DaiShenHeDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+    	<property name="mapperInterface" value="com.ftg.product.dao.DaiShenHeDao" />  
+    	<property name="sqlSessionFactory" ref="sqlSessionFactory" />  
+	</bean>
+	<bean id="ShengChanDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+    	<property name="mapperInterface" value="com.ftg.product.dao.ShengChanDao" />  
+    	<property name="sqlSessionFactory" ref="sqlSessionFactory" />  
+	</bean> 
+	
+	<!-- 唐丹丹的PD  DAO计划的 -->
+	<bean id="PD"  class="org.mybatis.spring.mapper.MapperFactoryBean">  
+    	<property name="mapperInterface" value="com.ftg.product.dao.PD" />  
+    	<!--sqlSessionFactory  是mybaits 提供一个 处理 sql语句的  对象信息  -->
+    	<property name="sqlSessionFactory" ref="sqlSessionFactory" />  
+	</bean>
+	
+	<!-- 唐丹丹的交库Dao -->
+	<bean id="PlanDao"  class="org.mybatis.spring.mapper.MapperFactoryBean">  
+    	<property name="mapperInterface" value="com.ftg.product.dao.PlanDao" />  
+    	<!--sqlSessionFactory  是mybaits 提供一个 处理 sql语句的  对象信息  -->
+    	<property name="sqlSessionFactory" ref="sqlSessionFactory" />  
+	</bean>
+	
+	<!-- 程智的LoginDao -->
+	<bean id="LoginDao"  class="org.mybatis.spring.mapper.MapperFactoryBean">  
+    	<property name="mapperInterface" value="com.ftg.product.dao.LoginDao" />  
+    	<!--sqlSessionFactory  是mybaits 提供一个 处理 sql语句的  对象信息  -->
+    	<property name="sqlSessionFactory" ref="sqlSessionFactory" />  
+	</bean>
+	
+	<!-- 程智的ZhuCeDao -->
+	<bean id="ZhuCeDao"  class="org.mybatis.spring.mapper.MapperFactoryBean">  
+    	<property name="mapperInterface" value="com.ftg.product.dao.ZhuCeDao" />  
+    	<!--sqlSessionFactory  是mybaits 提供一个 处理 sql语句的  对象信息  -->
+    	<property name="sqlSessionFactory" ref="sqlSessionFactory" />  
+	</bean>
+	
+	<!-- 程智的PersonManagerDao -->
+	<bean id="PersonManagerDao"  class="org.mybatis.spring.mapper.MapperFactoryBean">  
+    	<property name="mapperInterface" value="com.ftg.product.dao.PersonManageDao" />  
+    	<!--sqlSessionFactory  是mybaits 提供一个 处理 sql语句的  对象信息  -->
+    	<property name="sqlSessionFactory" ref="sqlSessionFactory" />  
+	</bean>
+</beans>  
